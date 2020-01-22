@@ -22,11 +22,22 @@ function findById(id) {
 }
 
 function findSteps(id) {
-  return db('steps').where({ scheme_id: id }).orderBy('id')
+  return db('steps as st')
+    .select('st.id', 'st.step_number', 'sc.scheme_name')
+    .join('schemes as sc', 'st.scheme_id', 'sc.id')
+    .where({ 'st.scheme_id': id })
+    .orderBy('id')
+  // this needs to be a join
 }
 
 function add(scheme) {
-  return db('schemes').insert(scheme)
+  db('schemes').insert(scheme)
+    .then( ids => {
+      return findById(ids[0].toString())
+    })
+    .catch( err => {
+      console.log(err);
+    })
 }
 
 function addStep(stepData, id) {

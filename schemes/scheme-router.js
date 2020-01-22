@@ -50,12 +50,12 @@ router.post('/', (req, res) => {
   const schemeData = req.body;
 
   Schemes.add(schemeData)
-  .then(scheme => {
-    res.status(201).json(scheme);
-  })
-  .catch (err => {
-    res.status(500).json({ message: 'Failed to create new scheme' });
-  });
+    .then(scheme => {
+      res.status(201).json({message: `status 201: successfully created resource`, resource: scheme});
+    })
+    .catch (err => {
+      res.status(500).json({ message: 'Failed to create new scheme' });
+    });
 });
 
 router.post('/:id/steps', (req, res) => {
