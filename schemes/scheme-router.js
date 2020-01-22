@@ -50,8 +50,17 @@ router.post('/', (req, res) => {
   const schemeData = req.body;
 
   Schemes.add(schemeData)
-  .then(scheme => {
-    res.status(201).json(scheme);
+  .then( ids => {
+    console.log(ids);
+    if(ids) {
+      Schemes.findById(ids[0])
+        .then( resou => {
+          res.status(201).json({ message: `status 201: successfully added scheme`, resource: resou });
+        })
+    } else {
+      res.status(500);
+    }
+    
   })
   .catch (err => {
     res.status(500).json({ message: 'Failed to create new scheme' });
@@ -86,8 +95,16 @@ router.put('/:id', (req, res) => {
   .then(scheme => {
     if (scheme) {
       Schemes.update(changes, id)
-      .then(updatedScheme => {
-        res.json(updatedScheme);
+      .then(success => {
+        if(success) {
+          Schemes.findById(id)
+            .then( resou => {
+              res.status(200).json({ message: `status 200: update successful`, resource: resou});
+            })
+        } else {
+          res.status(500).json({ message: `status 500: internal server error` })
+        }
+        
       });
     } else {
       res.status(404).json({ message: 'Could not find scheme with given id' });
@@ -104,7 +121,7 @@ router.delete('/:id', (req, res) => {
   Schemes.remove(id)
   .then(deleted => {
     if (deleted) {
-      res.json({ removed: deleted });
+      res.status(200).json({ removed: deleted });
     } else {
       res.status(404).json({ message: 'Could not find scheme with given id' });
     }
