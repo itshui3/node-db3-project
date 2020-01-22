@@ -5,7 +5,6 @@ module.exports = {
   findById,
   findSteps,
   add,
-
   update,
   remove
 }
@@ -32,12 +31,13 @@ function add(scheme) {
   return db('schemes').insert(scheme)
 }
 
-
-
 function update(changes, id) {
   return db('schemes').where({ id }).update(changes)
 }
 
 function remove(id) {
-  return db('schemes').where({ id }).del();
+  return db('schemes')
+    .where({ id })
+    .del();
+  // Why is this good?
 }

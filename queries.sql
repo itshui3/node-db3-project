@@ -36,6 +36,16 @@ JOIN Employee AS e
 
 -- Stretch: Displays CategoryName and a new column called Count that shows how many products are in each category. Shows 9 records.
 
-
+SELECT c.CategoryName, COUNT(DISTINCT p.ProductName) AS DistinctProducts
+  FROM Products AS p
+JOIN Categories AS c
+  ON p.CategoryId = c.CategoryId
+GROUP BY c.CategoryName;
 
 -- Stretch: Display OrderID and a column called ItemCount that shows the total number of products placed on the order. Shows 196 records.
+
+SELECT o.Id AS OrderID, SUM(od.Quantity) AS ItemCount
+FROM [Order] AS o
+JOIN OrderDetail AS od
+ON o.Id = od.OrderId
+GROUP BY o.Id;
