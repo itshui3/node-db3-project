@@ -44,6 +44,13 @@ function update(changes, id) {
 function remove(id) {
   return db('schemes')
     .where({ id })
-    .del();
+    .del()
+      .then( resu => {
+        return findById(id)
+
+      })
+      .catch( err => {
+        console.log(err);
+      })
   // Why is this good?
 }

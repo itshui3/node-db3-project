@@ -2,6 +2,8 @@ const express = require('express');
 
 const Schemes = require('./scheme-model.js');
 
+const validation = require('../middleware/scheme-validation')
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -134,20 +136,16 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validation.validateId, (req, res) => {
   const { id } = req.params;
-
   Schemes.remove(id)
-  .then(deleted => {
-    if (deleted) {
-      res.status(200).json({ removed: deleted });
-    } else {
-      res.status(404).json({ message: 'Could not find scheme with given id' });
-    }
-  })
-  .catch(err => {
-    res.status(500).json({ message: 'Failed to delete scheme' });
-  });
+    .then(deleted => {
+      console.log(deleted, 'deleted');
+      res.status(200).json({ removed: req.resou });
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to delete scheme' });
+    });
 });
 
 module.exports = router;
