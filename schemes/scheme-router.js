@@ -68,6 +68,25 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/steps', (req, res) => {
+  const id = req.params.id;
+  const newStep = req.body;
+  Schemes.addStep(newStep, id)
+    .then( resu => {
+      if(resu) {
+        Schemes.findById(resu)
+          .then(resou => {
+            res.status(201).json({ message: `status 201: resource created`, resource: resou })
+          })
+      } else {
+        res.status(400).json({ message: `status 400: client error, could not add resource` })
+      }
+    })
+    .catch( err => {
+      res.status(500).json({ message: `status 500: internal server error, could not add resource` })
+    })
+})
+
+router.post('/:id/steps', (req, res) => {
   const stepData = req.body;
   const { id } = req.params; 
 
